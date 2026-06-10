@@ -5,6 +5,7 @@ from . models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 import json
+from urllib.parse import unquote
  
  
 def home(request):
@@ -120,6 +121,7 @@ def collections(request):
   return render(request,"myshop/collections.html",{"catagory":catagory})
  
 def collectionsview(request,name):
+  name = unquote(name)
   if(Catagory.objects.filter(name=name,status=0)):
       products=Product.objects.filter(category__name=name)
       return render(request,"myshop/products/index.html",{"products":products,"category_name":name})
@@ -129,6 +131,8 @@ def collectionsview(request,name):
  
  
 def product_details(request,cname,pname):
+    cname = unquote(cname)
+    pname = unquote(pname)
     if(Catagory.objects.filter(name=cname,status=0)):
       if(Product.objects.filter(name=pname,status=0)):
         products=Product.objects.filter(name=pname,status=0).first()
