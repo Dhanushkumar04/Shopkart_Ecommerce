@@ -1,0 +1,72 @@
+{% load static %}
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+      aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+      aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+      aria-label="Slide 3"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+      aria-label="Slide 4"></button>
+  </div>
+
+  <div class="carousel-inner">
+    <!-- Slide 1: Electronics -->
+    <div class="carousel-item active">
+      <img src="{% static 'images/electronics_banner.png' %}" class="d-block w-100" alt="Electronics Collection">
+      <div class="carousel-caption">
+        <h2 class="animate__animated animate__fadeInUp">Next-Gen Electronics</h2>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s">Unleash the power of modern technology. Up to
+          40% off on flagship smartphones, accessories, and premium tech essentials.</p>
+        <a href="{% url 'collections' %}"
+          class="btn btn-primary btn-lg animate__animated animate__fadeInUp animate__delay-2s">Shop Electronics</a>
+      </div>
+    </div>
+
+    <!-- Slide 2: Fashion -->
+    <div class="carousel-item">
+      <img src="{% static 'images/fashion_banner.png' %}" class="d-block w-100 h-100" alt="Fashion Deals">
+      <div class="carousel-caption">
+        <h2 class="animate__animated animate__fadeInUp">Premium Streetwear</h2>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s">Define your look with our modern apparel.
+          Discover the ultimate curation of top fashion trends and streetwear essentials.</p>
+        <a href="{% url 'collections' %}"
+          class="btn btn-primary btn-lg animate__animated animate__fadeInUp animate__delay-2s">Explore Fashion</a>
+      </div>
+    </div>
+
+    <!-- Slide 3: Home Decor -->
+    <div class="carousel-item">
+      <img src="{% static 'images/home_banner.png' %}" class="d-block w-100" alt="Home Decor">
+      <div class="carousel-caption">
+        <h2 class="animate__animated animate__fadeInUp">Modern Living Spaces</h2>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s">Transform your home into a serene sanctuary.
+          Amazing discounts on minimalist furniture and premium aesthetic decor.</p>
+        <a href="{% url 'collections' %}"
+          class="btn btn-primary btn-lg animate__animated animate__fadeInUp animate__delay-2s">Discover Decor</a>
+      </div>
+    </div>
+
+    <!-- Slide 4: Grocery -->
+    <div class="carousel-item">
+      <img src="{% static 'images/grocery_banner.png' %}" class="d-block w-100" alt="Fresh Grocery">
+      <div class="carousel-caption">
+        <h2 class="animate__animated animate__fadeInUp">Fresh & Organic Grocery</h2>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s">Freshness delivered right to your doorstep.
+          Fill your pantry with the highest quality local organic produce and save big.</p>
+        <a href="{% url 'collections' %}"
+          class="btn btn-primary btn-lg animate__animated animate__fadeInUp animate__delay-2s">Order Fresh</a>
+      </div>
+    </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>

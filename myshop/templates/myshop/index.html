@@ -1,0 +1,79 @@
+{% extends 'myshop/layouts/main.html' %}
+{% block title %}
+ShopKart | Premium Online Shopping
+{% endblock title %}
+
+{% block content %}
+{% include 'myshop/inc/slider.html' %}
+
+<div class="container" style="margin-top: 80px; margin-bottom: 80px;">
+  <!-- Glow Blur Decoration -->
+  <div class="glow-blur" style="top: 20%; left: 10%;"></div>
+  <div class="glow-blur" style="top: 60%; right: 5%;"></div>
+  
+  <div class="row">
+    <div class="col-12 text-center mb-5">
+      <h2 class="section-title">Latest & Trending Deals</h2>
+      <p class="text-muted">Explore our handpicked selection of premium quality items on discount today.</p>
+      <hr style="max-width: 150px; margin: 1.5rem auto; border-width: 2px; border-color: var(--accent-indigo) !important;">
+    </div>
+  </div>
+  
+  <div class="row g-4 justify-content-center">
+    {% for item in products %}
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center">
+      <a href="{% url 'product_details' item.category.name item.name %}" class="interactive-card-wrapper">
+        <div class="interactive-card">
+          <!-- Hot/Trending Badge -->
+          {% if item.trending %}
+            <div class="hot">Hot</div>
+          {% endif %}
+          
+          <!-- Product Image Container -->
+          <div class="card-bg-img-container">
+            {% if item.product_image %}
+              <img src="{{item.product_image.url}}" class="card-bg-img" alt="{{ item.name }}">
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600" class="card-bg-img" alt="Placeholder">
+            {% endif %}
+          </div>
+          
+          <!-- Card Overlays -->
+          <div class="card-overlay"></div>
+          
+          <!-- Card Glassmorphic Contents -->
+          <div class="card-content">
+            <div class="card-glass-header">
+              <div>
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.category.name }}</p>
+              </div>
+              <div class="card-brand-logo">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+            </div>
+            
+            <div class="card-price-container">
+              <span class="card-price-badge">Rs.{{ item.selling_price | stringformat:'d' }}</span>
+              <span class="card-old-price"><s>Rs.{{ item.original_price | stringformat:'d' }}</s></span>
+            </div>
+            
+            <!-- Indicators -->
+            <div class="card-action-dots">
+              <div class="card-dot active"></div>
+              <div class="card-dot"></div>
+              <div class="card-dot"></div>
+              <div class="card-dot"></div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <h5 class="text-muted"><i class="fa-solid fa-face-frown me-2"></i>No products found at the moment.</h5>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

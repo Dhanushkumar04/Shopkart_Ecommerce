@@ -1,0 +1,26 @@
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+Pipfile.lock
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database files
+db.sqlite3
+db.sqlite3-journal
+
+# Media / Static build directories
+staticfiles/
+media/
+
+# Vercel temporary folder
+.vercel/
+
+# OS specific files
+.DS_Store
+Thumbs.db

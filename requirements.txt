@@ -1,0 +1,9 @@
+Django
+mysqlclient
+psycopg2-binary
+pillow
+sqlparse
+asgiref
+tzdata
+dj-database-url
+whitenoise

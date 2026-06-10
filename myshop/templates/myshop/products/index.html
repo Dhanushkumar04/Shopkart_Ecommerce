@@ -1,0 +1,88 @@
+{% extends 'myshop/layouts/main.html' %}
+{% block title %}
+{{ category_name }} Collection | ShopKart
+{% endblock title %}
+
+{% block content %}
+<!-- Glow Blur Background Deco -->
+<div class="glow-blur" style="top: 20%; left: 10%;"></div>
+<div class="glow-blur" style="top: 70%; right: 10%;"></div>
+
+<section class="py-5" style="margin-top: 80px; min-height: 600px;">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 mb-4">
+        <!-- Breadcrumb Navigation -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb" style="background: transparent; padding: 0;">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-info"><i class="fa-solid fa-house me-1"></i>Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'collections' %}" class="text-info">Collections</a></li>
+            <li class="breadcrumb-item active text-white" aria-current="page">{{category_name}}</li>
+          </ol>
+        </nav>
+        
+        <h2 class="section-title">{{category_name}} Products</h2>
+        <p class="text-muted">Browse the finest items in our {{category_name}} category.</p>
+        <hr>
+        {% include 'myshop/inc/message.html' %}
+      </div>
+    </div>
+    
+    <div class="row g-4 mt-4 justify-content-center">
+      {% for item in products %}
+      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center">
+        <a href="{% url 'product_details' category_name item.name %}" class="interactive-card-wrapper">
+          <div class="interactive-card">
+            <!-- Trending/Hot Badge -->
+            {% if item.trending %}
+              <div class="hot">Hot</div>
+            {% endif %}
+            
+            <!-- Product Image -->
+            <div class="card-bg-img-container">
+              {% if item.product_image %}
+                <img src="{{item.product_image.url}}" class="card-bg-img" alt="{{ item.name }}">
+              {% else %}
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600" class="card-bg-img" alt="Placeholder">
+              {% endif %}
+            </div>
+            
+            <div class="card-overlay"></div>
+            
+            <!-- Card Contents -->
+            <div class="card-content">
+              <div class="card-glass-header">
+                <div>
+                  <h3>{{ item.name }}</h3>
+                  <p>{{ category_name }}</p>
+                </div>
+                <div class="card-brand-logo">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+              </div>
+              
+              <div class="card-price-container">
+                <span class="card-price-badge">Rs.{{ item.selling_price | stringformat:'d' }}</span>
+                <span class="card-old-price"><s>Rs.{{ item.original_price | stringformat:'d' }}</s></span>
+              </div>
+              
+              <!-- Dots indicators -->
+              <div class="card-action-dots">
+                <div class="card-dot active"></div>
+                <div class="card-dot"></div>
+                <div class="card-dot"></div>
+                <div class="card-dot"></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <h5 class="text-muted"><i class="fa-solid fa-box-open me-2"></i>No products found in this category.</h5>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock content %}

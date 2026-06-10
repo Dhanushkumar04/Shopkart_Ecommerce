@@ -1,0 +1,183 @@
+{% extends 'myshop/layouts/main.html' %}
+{% block title %}
+{{ products.name }} | ShopKart
+{% endblock title %}
+
+{% block content %}
+<!-- Glow Blur Background Deco -->
+<div class="glow-blur" style="top: 25%; left: 15%;"></div>
+<div class="glow-blur" style="top: 60%; right: 15%;"></div>
+
+<section class="py-5" style="margin-top: 80px; min-height: 600px;">
+  <div class="container">
+    <!-- Breadcrumb Row -->
+    <div class="row">
+      <div class="col-12 mb-4">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb" style="background: transparent; padding: 0;">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-info"><i class="fa-solid fa-house me-1"></i>Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'collections' %}" class="text-info">Collections</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'collections' products.category.name %}" class="text-info">{{ products.category.name }}</a></li>
+            <li class="breadcrumb-item active text-white" aria-current="page">{{ products.name }}</li>
+          </ol>
+        </nav>
+        <hr>
+        {% include 'myshop/inc/message.html' %}
+      </div>
+    </div>
+    
+    <!-- Product View Row -->
+    <div class="row">
+      <!-- Left Column: Product Image Frame -->
+      <div class="col-md-5 col-lg-5 mb-4">
+        <div class="detail-img-container">
+          {% if products.trending %}
+            <div class="hot">Hot</div>
+          {% endif %}
+          {% if products.product_image %}
+            <img src="{{ products.product_image.url }}" alt="{{ products.name }}">
+          {% else %}
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800" alt="Placeholder">
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Right Column: Product Specs & Actions -->
+      <div class="col-md-7 col-lg-7">
+        <div class="detail-info-card">
+          <span class="detail-vendor"><i class="fa-solid fa-tag me-1"></i>{{ products.vendor }}</span>
+          <h1 class="detail-title">{{ products.name }}</h1>
+          
+          <p class="detail-desc">{{ products.description }}</p>
+          
+          <div class="detail-price-box">
+            <span class="detail-offer-price">Rs.{{ products.selling_price | stringformat:'d' }}</span>
+            <span class="detail-old-price">Rs.<s>{{ products.original_price | stringformat:'d' }}</s></span>
+          </div>
+          
+          <div class="my-4">
+            {% if products.quantity > 0 %}
+              <input type="hidden" value="{{ products.id }}" id="pid">
+              
+              <div class="d-flex flex-wrap align-items-center gap-3">
+                <!-- Custom Quantity Selector -->
+                <div>
+                  <label class="form-label-custom">Quantity</label>
+                  <div class="qty-group">
+                    <button class="qty-btn" id="btnMinus"><i class="fa-solid fa-minus"></i></button>
+                    <input type="text" name="qty" id="txtQty" value="1" class="qty-input">
+                    <button class="qty-btn" id="btnPlus"><i class="fa-solid fa-plus"></i></button>
+                  </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="d-flex align-items-end gap-2 h-100 mt-4">
+                  <button class="btn btn-primary" id="btnCart">
+                    <i class="fa-solid fa-cart-arrow-down me-2"></i>Add to Cart
+                  </button>
+                  <button class="btn btn-danger" id="btnFav" title="Add to Favorites">
+                    <i class="fa-solid fa-heart"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="mt-3">
+                <span class="badge bg-success py-2 px-3 rounded-pill"><i class="fa-solid fa-circle-check me-1"></i>In Stock ({{ products.quantity }} available)</span>
+              </div>
+            {% else %}
+              <div class="mb-3">
+                <span class="badge bg-secondary py-2 px-3 rounded-pill"><i class="fa-solid fa-circle-xmark me-1"></i>Out of Stock</span>
+              </div>
+              <button class="btn btn-secondary" disabled><i class="fa-solid fa-ban me-2"></i>Out of Stock</button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Logic for AJAX Add to Cart / Favourites (Intact) -->
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+  const btnPlus = document.getElementById("btnPlus");
+  const btnMinus = document.getElementById("btnMinus");
+  const txtQty = document.getElementById("txtQty");
+  const pid = document.getElementById("pid");
+  const btnCart = document.getElementById("btnCart");
+  const btnFav = document.getElementById("btnFav");
+
+  if(btnPlus && btnMinus && txtQty) {
+    btnPlus.addEventListener("click", function() {
+      let qty=parseInt(txtQty.value,10);
+      qty=isNaN(qty)?0:qty;
+      if(qty<10){
+        qty++;
+        txtQty.value=qty;
+      }
+    });
+
+    btnMinus.addEventListener("click", function() {
+        let qty=parseInt(txtQty.value,10);
+        qty=isNaN(qty)?0:qty;
+        if(qty>1){
+          qty--;
+          txtQty.value=qty;
+        }
+    });
+  }
+
+  if(btnCart && pid) {
+    btnCart.addEventListener("click", function() {
+        let qty=parseInt(txtQty.value,10);
+        qty=isNaN(qty)?0:qty;
+        
+        if(qty>0){
+          let postObj = { 
+              'product_qty': qty, 
+              'pid': pid.value
+          }
+          fetch("/addtocart",{
+            method: 'POST',
+            credentials: 'same-origin',
+            headers:{
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify(postObj)
+          }).then(response => {
+  	        return response.json();
+          }).then(data => {
+            alert(data['status']);
+          });
+        }else{
+          alert("Please Enter The Quantity");
+        }
+    });
+  }
+
+  if(btnFav && pid) {
+    btnFav.addEventListener("click", function() {
+        let postObj = { 
+            'pid': pid.value
+        }
+        fetch("/fav",{
+          method: 'POST',
+          credentials: 'same-origin',
+          headers:{
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': '{{ csrf_token }}',
+          },
+          body: JSON.stringify(postObj)
+        }).then(response => {
+  	        return response.json();
+          }).then(data => {
+            alert(data['status']);
+          });
+    });
+  }
+});
+</script>
+{% endblock content %}
